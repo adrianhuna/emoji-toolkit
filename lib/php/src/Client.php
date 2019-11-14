@@ -93,7 +93,8 @@ class Client implements ClientInterface
         {
             $ruleset = $this->getRuleset();
             $asciiRegexp = $ruleset->getAsciiRegexp();
-            $asciiRX = ($this->riskyMatchAscii) ? '|(()'.$asciiRegexp.'())' : '|((\\s|^)'.$asciiRegexp.'(?=\\s|$|[!,.?]))';
+            // $asciiRX = ($this->riskyMatchAscii) ? '|(()'.$asciiRegexp.'())' : '|((\\s|^)'.$asciiRegexp.'(?=\\s|$|[!,.?]))';
+            $asciiRX = ($this->riskyMatchAscii) ? '|(()'.$asciiRegexp.'())' : '|((\\s|^)'.$asciiRegexp.'(?=[^<>]*(?:<\/?|$)))';
 
             $string = preg_replace_callback('/'.$this->ignoredRegexp.$asciiRX.'/S', array($this, 'asciiToUnicodeCallback'), $string);
         }
@@ -343,7 +344,7 @@ class Client implements ClientInterface
 
                 return $m[2].$shortcode;
             }
-        }   
+        }
     }
 
     /**
